@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1B1F3B">
+<title>סטודיו הצגה – סרטונים ומצגות לפי דרישה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDEFF5; --ink:#1B1F3B; --cobalt:#3A4BFF; --sun:#FFC83D;
+  --panel:#FFFFFF; --line:#CDD2E4; --muted:#5B6180; --err:#B3261E;
+  --display:'Secular One','Heebo',system-ui,sans-serif;
+  --body:'Heebo',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cobalt);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 80px}
+
+header.top{display:flex;align-items:center;gap:10px;margin-bottom:44px}
+.logo{width:34px;height:24px;border-radius:4px;background:var(--ink);position:relative}
+.logo::after{content:"";position:absolute;inset:5px 7px 5px 7px;background:var(--sun);border-radius:2px}
+.brand{font-family:var(--display);font-size:22px}
+
+h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,7vw,64px);line-height:1.08;max-width:15ch;letter-spacing:-.01em}
+.lead{margin-top:16px;color:var(--muted);max-width:46ch;font-size:19px}
+
+.strip{margin:36px 0 28px;background:var(--ink);border-radius:14px;padding:18px 18px 16px;color:#fff}
+.strip-row{display:flex;align-items:center;gap:14px}
+.strip-row + .strip-row{margin-top:14px}
+.strip-label{flex:0 0 58px;font-size:14px;color:#AEB4DA}
+.film{flex:1;display:flex;gap:3px;height:30px;min-width:0}
+.film i{flex:1;background:var(--sun);border-radius:2px;min-width:2px;transition:background .2s}
+.film.slides i{background:#fff;border-radius:3px;aspect-ratio:auto}
+.strip-sum{margin-top:12px;font-size:14px;color:#AEB4DA}
+.strip-sum b{color:#fff;font-weight:500}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+.field+.field{margin-top:22px}
+label.l,.l{display:block;font-weight:700;margin-bottom:8px}
+.hint{color:var(--muted);font-size:15px;font-weight:400}
+textarea,select,input[type=number],input[type=text]{width:100%;background:#F7F8FC;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px}
+textarea{min-height:104px;resize:vertical}
+textarea:focus,select:focus,input:focus{border-color:var(--cobalt);outline:none;box-shadow:0 0 0 3px rgba(58,75,255,.18)}
+
+.seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:#F7F8FC}
+.seg button{flex:1;border:0;background:transparent;padding:11px 8px;cursor:pointer;font-weight:500}
+.seg button+button{border-inline-start:1.5px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.nums.one{grid-template-columns:1fr}
+.nums .hide{display:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+
+.go{margin-top:26px;width:100%;border:0;border-radius:12px;background:var(--cobalt);color:#fff;font-weight:700;font-size:19px;padding:16px;cursor:pointer;transition:transform .12s,background .12s}
+.go:hover{background:#2c3be6}
+.go:active{transform:scale(.99)}
+.go[disabled]{background:#9aa1d6;cursor:wait}
+
+.prog{margin-top:22px;display:none}
+.prog.on{display:block}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--cobalt);transition:width .3s}
+.prog p{margin-top:8px;color:var(--muted);font-size:15px}
+.error{margin-top:18px;color:var(--err);background:#FCEBEA;border-radius:10px;padding:12px 14px;display:none}
+.error.on{display:block}
+
+#results{margin-top:44px;display:none}
+#results.on{display:block}
+.rhead{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.rtitle{font-family:var(--display);font-size:clamp(24px,4vw,34px);line-height:1.2}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tabs button{border:1.5px solid var(--ink);background:transparent;border-radius:99px;padding:8px 18px;cursor:pointer;font-weight:500}
+.tabs button[aria-selected=true]{background:var(--ink);color:#fff}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--ink)}
+
+.stage{background:var(--ink);border-radius:14px;padding:14px}
+.slide{aspect-ratio:16/9;background:#fff;border-radius:8px;padding:5% 6%;display:flex;flex-direction:column;position:relative;overflow:hidden;container-type:inline-size}
+.slide::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:1.6%;background:var(--sun)}
+.slide h3{font-family:var(--display);font-weight:400;font-size:5.2cqw;line-height:1.15;margin-bottom:3cqw}
+.slide ul{list-style:none;display:flex;flex-direction:column;gap:1.6cqw}
+.slide li{font-size:2.8cqw;line-height:1.4;padding-inline-start:3cqw;position:relative}
+.slide li::before{content:"";position:absolute;inset-inline-start:0;top:1.6cqw;width:1.1cqw;height:1.1cqw;background:var(--cobalt);border-radius:2px}
+.slide .vis{margin-top:auto;font-size:2cqw;color:var(--muted);border-top:1px solid var(--line);padding-top:1.4cqw}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px;color:#fff}
+.nav button{background:var(--sun);color:var(--ink);border:0;border-radius:10px;padding:9px 18px;font-weight:700;cursor:pointer}
+.nav button[disabled]{opacity:.35;cursor:default}
+.notes{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.notes h4{font-size:16px;margin-bottom:4px}
+.thumbs{display:flex;gap:6px;margin-top:12px;overflow-x:auto;padding-bottom:4px}
+.thumbs button{flex:0 0 auto;width:34px;height:26px;border-radius:4px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:12px}
+.thumbs button[aria-current=true]{background:var(--cobalt);color:#fff;border-color:var(--cobalt)}
+.thumbs button.pending{opacity:.4}
+
+.scene{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:76px 1fr;gap:16px}
+.scene+.scene{margin-top:10px}
+.time{font-family:var(--display);font-size:20px;color:var(--cobalt);direction:ltr;text-align:right}
+.scene h4{font-size:18px;margin-bottom:4px}
+.scene .vis{margin-top:10px;font-size:15px;color:var(--muted);background:#F7F8FC;border-radius:8px;padding:8px 12px}
+.scene.pending{opacity:.45}
+.stat{margin:6px 0 16px;color:var(--muted);font-size:15px}
+@media(max-width:560px){.scene{grid-template-columns:1fr;gap:4px}.time{text-align:start}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div class="logo" aria-hidden="true"></div><div class="brand">סטודיו הצגה</div></header>
+
+  <h1>כותבים נושא. מקבלים סרטון ומצגת.</h1>
+  <p class="lead">בוחרים מה צריך ואיזה אורך, וה־AI כותב את התסריט המלא ואת כל השקפים.</p>
+
+  <div class="strip" aria-live="polite">
+    <div class="strip-row" id="rowVideo"><div class="strip-label">סרטון</div><div class="film" id="filmVideo"></div></div>
+    <div class="strip-row" id="rowSlides"><div class="strip-label">מצגת</div><div class="film slides" id="filmSlides"></div></div>
+    <div class="strip-sum" id="stripSum"></div>
+  </div>
+
+  <div class="panel">
+    <div class="field">
+      <label class="l" for="topic">על מה הסרטון או המצגת?</label>
+      <textarea id="topic" placeholder="למשל: איך עובדת חשבונאות בסיסית לעסק קטן"></textarea>
+    </div>
+
+    <div class="field">
+      <div class="l" id="typeL">מה ליצור?</div>
+      <div class="seg" role="group" aria-labelledby="typeL" id="type">
+        <button type="button" data-v="video" aria-pressed="false">סרטון</button>
+        <button type="button" data-v="slides" aria-pressed="false">מצגת</button>
+        <button type="button" data-v="both" aria-pressed="true">שניהם</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="nums" id="nums">
+        <div id="minBox">
+          <label class="l" for="minutes">אורך הסרטון (דקות) <span class="hint">ברירת מחדל 5</span></label>
+          <input type="number" id="minutes" min="1" max="30" value="5" inputmode="numeric">
+        </div>
+        <div id="slBox">
+          <label class="l" for="slides">מספר שקפים <span class="hint">ברירת מחדל 10</span></label>
+          <input type="number" id="slides" min="3" max="40" value="10" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+
+    <div class="field row2">
+      <div>
+        <label class="l" for="audience">קהל יעד <span class="hint">אפשר להשאיר ריק</span></label>
+        <input type="text" id="audience" placeholder="למשל: בעלי עסקים קטנים">
+      </div>
+      <div>
+        <label class="l" for="tone">סגנון</label>
+        <select id="tone">
+          <option>מקצועי וברור</option>
+          <option>קליל ומשעשע</option>
+          <option>רציני ומעמיק</option>
+          <option>מעורר השראה</option>
+          <option>לימודי, צעד אחר צעד</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="go" id="go" type="button">צור</button>
+
+    <div class="prog" id="prog" role="status">
+      <div class="bar"><span id="barFill"></span></div>
+      <p id="progText"></p>
+    </div>
+    <div class="error" id="err" role="alert"></div>
+  </div>
+
+  <section id="results" aria-label="התוצאה">
+    <div class="rhead">
+      <div class="rtitle" id="rtitle"></div>
+      <div class="tools">
+        <button class="btn" id="copyBtn" type="button">העתק טקסט</button>
+        <button class="btn" id="dlBtn" type="button">הורד קובץ</button>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="panelSlides" hidden></div>
+    <div id="panelVideo" hidden></div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const state = { type:"both", video:null, slides:null, tab:"slides", cur:0, running:false };
+
+const getMin = () => Math.max(1, Math.min(30, parseInt($("minutes").value) || 5));
+const getSl  = () => Math.max(3, Math.min(40, parseInt($("slides").value) || 10));
+const sceneCount = m => Math.max(3, Math.round(m * 2));
+
+function fillFilm(el, n){ el.innerHTML = Array.from({length:n},()=>"<i></i>").join(""); }
+function updateStrip(){
+  const t = state.type, m = getMin(), s = getSl();
+  $("rowVideo").style.display = t === "slides" ? "none" : "flex";
+  $("rowSlides").style.display = t === "video" ? "none" : "flex";
+  $("minBox").classList.toggle("hide", t === "slides");
+  $("slBox").classList.toggle("hide", t === "video");
+  $("nums").classList.toggle("one", t !== "both");
+  fillFilm($("filmVideo"), sceneCount(m));
+  fillFilm($("filmSlides"), s);
+  const parts = [];
+  if (t !== "slides") parts.push(`סרטון של <b>${m} דקות</b> (בערך ${sceneCount(m)} קטעים)`);
+  if (t !== "video") parts.push(`מצגת של <b>${s} שקפים</b>`);
+  $("stripSum").innerHTML = parts.join(" ו");
+}
+document.querySelectorAll("#type button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    state.type = b.dataset.v;
+    document.querySelectorAll("#type button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+    updateStrip();
+  });
+});
+["minutes","slides"].forEach(id=>$(id).addEventListener("input",updateStrip));
+updateStrip();
+
+async function ask(system, user){
+  const r = await fetch("/api/generate",{
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ system, user })
+  });
+  if(!r.ok) throw new Error("API " + r.status);
+  const d = await r.json();
+  if(d.error) throw new Error(d.error);
+  return d.text || "";
+}
+function parseJSON(t){
+  t = t.replace(/```json|```/g,"").trim();
+  const s = t.search(/[\[{]/), e = Math.max(t.lastIndexOf("}"), t.lastIndexOf("]"));
+  return JSON.parse(t.slice(s, e+1));
+}
+async function askJSON(system, user){
+  for(let i=0;i<3;i++){
+    try{ return parseJSON(await ask(system, user)); }
+    catch(e){ if(i===2) throw e; }
+  }
+}
+async function pool(tasks, limit){
+  let i = 0;
+  const worker = async()=>{ while(i < tasks.length){ const k = i++; await tasks[k](); } };
+  await Promise.all(Array.from({length:Math.min(limit,tasks.length)}, worker));
+}
+
+const SYS = "אתה כותב תוכן מקצועי בעברית: תסריטי וידאו ומצגות. כתוב עברית טבעית וברורה. החזר JSON תקין בלבד, בלי הסברים ובלי גדרות קוד.";
+
+let done = 0, total = 0;
+function tick(text){
+  done++;
+  $("barFill").style.width = Math.min(100, Math.round(done/total*100)) + "%";
+  if(text) $("progText").textContent = text;
+}
+function ctx(){
+  const a = $("audience").value.trim();
+  return `נושא: ${$("topic").value.trim()}\nסגנון: ${$("tone").value}` + (a ? `\nקה
